@@ -23,12 +23,12 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
-    restart: unless-stopped
+    restart: "no"
     expose:
       - 9090
     networks:
       - monitor-net
-    labels:
+    labels:/
       org.label-schema.group: "monitoring"
 
   alertmanager:
@@ -39,7 +39,7 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
-    restart: unless-stopped
+    restart: "no"
     expose:
       - 9093
     networks:
@@ -59,7 +59,7 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-    restart: unless-stopped
+    restart: "no"
     expose:
       - 9100
     networks:
@@ -76,7 +76,7 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
-    restart: unless-stopped
+    restart: "no"
     expose:
       - 8080
     networks:
@@ -97,7 +97,7 @@ services:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
-    restart: unless-stopped
+    restart: "no"
     expose:
       - 3000
     networks:
@@ -108,7 +108,7 @@ services:
   pushgateway:
     image: prom/pushgateway:v0.8.0
     container_name: pushgateway
-    restart: unless-stopped
+    restart: "no"
     expose:
       - 9091
     networks:
@@ -129,7 +129,7 @@ services:
     environment:
       - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
-    restart: unless-stopped
+    restart: "no"
     networks:
       - monitor-net
     labels:
